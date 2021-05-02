@@ -1,0 +1,2 @@
+git add .- need -> git config --system core.longpaths true--> i used :git config --global core.longpaths true
+to add long file name with no error
