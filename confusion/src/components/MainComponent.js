@@ -36,6 +36,7 @@ class Main extends Component{
     
   }
   render() {
+    console.log(this.props)
     const HomePage = () => {
       return(
         <Home dish={this.props.dishes.filter( (dish) => dish.featured )[0] }
