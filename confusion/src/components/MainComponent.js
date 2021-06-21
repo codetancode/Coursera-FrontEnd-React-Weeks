@@ -10,6 +10,7 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 //with route is required to conect to store
 import { connect } from 'react-redux';
 import { addComment, fetchDishes } from '../redux/ActionCreators';
+import { actions } from 'react-redux-form';
 
 /* Map state to props function..connection goes with new props at the export of the Main component */
 /* update state to props as new state is given as props from store */
@@ -27,7 +28,9 @@ const mapDispatchToPorps = (dispatch) =>({
   //dispatch will return addcomment attribute/property
   //as ''mapDispatchToPorps'' is connected to mail app (below)
   addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
-  fetchDishes: () => {dispatch(fetchDishes())}
+  fetchDishes: () => {dispatch(fetchDishes())},
+  //adding a dispatch attrubute, then in contact component
+  resetFeedbackForm: () =>{ dispatch(actions.reset('feedback')) }
 });
 
 class Main extends Component{
@@ -81,7 +84,7 @@ class Main extends Component{
             <Route exact path="/menu/:dishId" component={DishWithID}/>   
             <Route exact path="/menu/:dishId" component={DishWithID}/>            
             <Route exact path="/aboutus" component={() => <About leaders={this.props.leaders} />}/>
-            <Route exact path="/contactus" component={Contact}/>
+            <Route exact path="/contactus" component={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />}/>
 
             <Redirect to="/home" />
           </Switch>
