@@ -14,7 +14,7 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
 class Contact extends Component {
     constructor(props){
      
-        {/* Names given to form elements will be same as the names given to the state elements */}
+        /* Names given to form elements will be same as the names given to the state elements */
         super(props);
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,7 +23,7 @@ class Contact extends Component {
     handleSubmit(values){
         console.log('Current state: '+JSON.stringify(values));
         alert('Current state: '+JSON.stringify(values));
-        //event.preventDefault();
+        /*event.preventDefault();*/
     }
 
 
@@ -60,7 +60,7 @@ class Contact extends Component {
                     <div className="col-12 col-sm-11 offset-sm-1">
                         <div className="btn-group" role="group">
                             <a role="button" className="btn btn-primary" href="tel:+85212345678"><i className="fa fa-phone"></i> Call</a>
-                            <a role="button" className="btn btn-info"><i className="fa fa-skype"></i> Skype</a>
+                            <a role="button" className="btn btn-info" href="www.skype.com"><i className="fa fa-skype"></i> Skype</a>
                             <a role="button" className="btn btn-success" href="mailto:confusion@food.net"><i className="fa fa-envelope-o"></i> Email</a>
                         </div>
                     </div>

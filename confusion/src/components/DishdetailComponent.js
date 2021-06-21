@@ -3,6 +3,7 @@ import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbIte
 import { Link } from 'react-router-dom';
 import { Component } from "react";
 import { Control, Errors, LocalForm } from 'react-redux-form';
+import { Loading } from './LoadingComponent';
 
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
 const minLength = (len) => (val) => val && (val.length >= len);
@@ -46,7 +47,24 @@ function RenderComments({comments, addComment, dishId}){
 
 
 const DishDetail = (props) => {
-    if(props.dish != null){
+    if(props.isLoading){
+        return(
+            //id is loading then render loading component
+            <div className='container'>
+                <div className="row">
+                    <Loading />
+                </div>
+            </div>
+        );
+    }
+    else if(props.errMsg){
+        return(
+            <div className='container'>
+                <h4>{props.errMsg}</h4>
+            </div>
+        );
+    }
+    else if(props.dish != null){
         return(
             <div className="container">
                 <div className="row">

@@ -9,10 +9,10 @@ import Contact  from './ContactComponent';//components/component class from comp
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 //with route is required to conect to store
 import { connect } from 'react-redux';
-import { addComment } from '../redux/ActionCreators';
+import { addComment, fetchDishes } from '../redux/ActionCreators';
 
-{/* Map state to props function..connection goes with new props at the export of the Main component */}
-{/* update state to props as new state is given as props from store */}
+/* Map state to props function..connection goes with new props at the export of the Main component */
+/* update state to props as new state is given as props from store */
 const mapStateToPorps = state =>{
   return{
     dishes:state.dishes,
@@ -26,7 +26,8 @@ const mapDispatchToPorps = (dispatch) =>({
   //dispatching a action creator obj via func ''addComment'', 
   //dispatch will return addcomment attribute/property
   //as ''mapDispatchToPorps'' is connected to mail app (below)
-  addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+  addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+  fetchDishes: () => {dispatch(fetchDishes())}
 });
 
 class Main extends Component{
@@ -37,6 +38,11 @@ class Main extends Component{
   }
 
 
+  //life-cycle method
+  //when Main component is being mounted in app, call fetchdishes
+  componentDidMount(){
+    this.props.fetchDishes();
+  }
 
   onDishSelect(dishId){
     this.setState({ selectedDish:dishId });
@@ -47,7 +53,9 @@ class Main extends Component{
     console.log(this.props)
     const HomePage = () => {
       return(
-        <Home dish={this.props.dishes.filter( (dish) => dish.featured )[0] }
+        <Home dish={this.props.dishes.dishes.filter( (dish) => dish.featured )[0] }
+        dishesLoading={this.props.dishes.isLoading}
+        dishesErrMsg={this.props.dishes.errmsg}
         promotion={this.props.promotions.filter( (promo) => promo.featured )[0] }
         leader={this.props.leaders.filter( (lead) => lead.featured )[0] } />
       );
@@ -56,7 +64,9 @@ class Main extends Component{
 
     const DishWithID = ({match}) =>{
       return(
-        <DishDetail dish={ this.props.dishes.filter((dish) => dish.id === parseInt(match.params.dishId, 10) )[0] }
+        <DishDetail dish={ this.props.dishes.dishes.filter((dish) => dish.id === parseInt(match.params.dishId, 10) )[0] }
+        isLoading={this.props.dishes.isLoading}
+        errMsg={this.props.dishes.errmsg}
         comments={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId, 10)) }
         addComment = { this.props.addComment }
         />
@@ -81,6 +91,6 @@ class Main extends Component{
   }
 }
 
-{/* Map state to props function..connectiong goes with new props at the export of the Main component */}
-{/* as we are using react router, we have to modefy the router as we are connection component to store using withRoute */}
+/* Map state to props function..connectiong goes with new props at the export of the Main component */
+/* as we are using react router, we have to modefy the router as we are connection component to store using withRoute */
 export default withRouter( connect(mapStateToPorps, mapDispatchToPorps)(Main) );

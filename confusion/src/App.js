@@ -6,9 +6,9 @@ import { Provider } from 'react-redux';
 import { ConfigureStore } from './redux/configure';
 
 
-{/* initiate store with the help of config/ get store*/}
+//initiate store with the help of config/ get store}
 const store = ConfigureStore();
-{/* Wrap our main APP with the help of provider with store to always render new state from store */}
+//{Wrap our main APP with the help of provider with store to always render new state from store */}
 
 class App extends Component{
 
