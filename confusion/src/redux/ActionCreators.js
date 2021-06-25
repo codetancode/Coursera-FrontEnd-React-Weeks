@@ -1,5 +1,5 @@
 import * as ActionTypes from './ActionTypes';
-import { DISHES } from '../shared/dishes';
+
 import { baseUrl } from '../shared/baseUrl';
 
 
@@ -23,8 +23,28 @@ export const fetchDishes = () => (dispatch) =>{
     //actual fetching from db server(fetching dishes from db server)
     //after getting the successful responce (will add dishes into the redux store via dispatch(action)) 
     return fetch(baseUrl + 'dishes')
+    //(Promise code structure)sequence of .then is a code structure(without ;) that will exe sequentially(passing response and operations on response)
+    .then( response =>{
+        if(response.ok){
+            return response
+        }
+        else{
+            //if fetch is not working(delay to get response from server)
+            var err = Error('Error' + response.status + ':' + response.text);
+            err.response = response;
+            throw err;
+        }
+    }, 
+    //error handler(no response at all then)
+    err => {
+        var errmsg = new Error(err.message);
+        throw errmsg;
+    })
+
     .then( response => response.json())
-    .then( dishes => dispatch(addDishes(dishes)) );
+    .then( dishes => dispatch(addDishes(dishes)) )
+    //if u are throwing error in .then blocks, catch will catch it and execute
+    .catch(err => dispatch(dishesFailed(err.message)) )
 
 }
 
@@ -51,8 +71,25 @@ export const fetchComments = () => (dispatch) =>{
     //actual fetching from db server(fetching comments from db server)
     //after getting the successful responce (will add comments into the redux store via dispatch(action)) 
     return fetch(baseUrl + 'comments')
+    .then( response =>{
+        if(response.ok){
+            return response
+        }
+        else{
+            //if fetch is not working(delay to get response from server)
+            var err = Error('Error' + response.status + ':' + response.text);
+            err.response = response;
+            throw err;
+        }
+    }, 
+    //error handler(no response at all then)
+    err => {
+        var errmsg = new Error(err.message);
+        throw errmsg;
+    })
     .then( response => response.json())
-    .then( comments => dispatch(addComments(comments)) );
+    .then( comments => dispatch(addComments(comments)) )
+    .catch(err => dispatch(commentsFailed(err.message)) )
 }
 
 export const commentsFailed = (errmsg) =>({
@@ -74,9 +111,26 @@ export const fetchPromos = () => (dispatch) =>{
     //actual fetching from db server(fetching Promos from db server)
     //after getting the successful responce (will add Promos into the redux store via dispatch(action)) 
     return fetch(baseUrl + 'promotions')
+    .then( response =>{
+        if(response.ok){
+            return response
+        }
+        else{
+            //if fetch is not working(delay to get response from server)
+            var err = Error('Error' + response.status + ':' + response.text);
+            err.response = response;
+            throw err;
+        }
+    }, 
+    //error handler(no response at all then)
+    err => {
+        var errmsg = new Error(err.message);
+        throw errmsg;
+    })
+    
     .then( response => response.json())
-    .then( promos => dispatch(addPromos(promos)) );
-
+    .then( promos => dispatch(addPromos(promos)) )
+    .catch(err => dispatch(promosFailed(err.message)) )
 }
 
 export const promosLoading = () =>({
