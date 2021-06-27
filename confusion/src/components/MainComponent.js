@@ -9,7 +9,7 @@ import Contact  from './ContactComponent';//components/component class from comp
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 //with route is required to conect to store
 import { connect } from 'react-redux';
-import { addComment, fetchDishes, fetchComments, fetchPromos} from '../redux/ActionCreators';
+import { postComment, fetchDishes, fetchComments, fetchPromos} from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 
 /* Map state to props function..connection goes with new props at the export of the Main component */
@@ -27,7 +27,7 @@ const mapDispatchToPorps = (dispatch) =>({
   //dispatching a action creator obj via func ''addComment'', 
   //dispatch will return addcomment attribute/property
   //as ''mapDispatchToPorps'' is connected to mail app (below)
-  addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+  postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment)),
   fetchDishes: () => {dispatch(fetchDishes())},
   //adding a dispatch attrubute, then in contact component
   resetFeedbackForm: () =>{ dispatch(actions.reset('feedback')) },
@@ -81,7 +81,7 @@ class Main extends Component{
         errMsg={this.props.dishes.errmsg}
         comments={this.props.comments.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId, 10)) }
         commentsErrMsg={this.props.comments.errmsg}
-        addComment = { this.props.addComment }
+        postComment = { this.props.postComment }
         />
       ); 
     }

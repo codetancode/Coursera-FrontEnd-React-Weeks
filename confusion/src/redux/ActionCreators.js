@@ -3,16 +3,57 @@ import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 
 
-export const addComment = ( dishId, rating, author, comment ) =>({
+export const addComment = ( comment ) =>({
     //function returning action js obj
     type: ActionTypes.ADD_COMMENT,
-    payload: {
-        dishId: dishId,
-        rating: rating,
-        author: author,
-        comment: comment
-    }
+    payload: comment
+    
 });
+
+/////////////POST comment into db(add new into db)///////////
+//thunk so sendding function so (dispatch)
+export const postComment = ( dishId, rating, author, comment ) => (dispatch) => {
+    const newComment = {
+        dishId: dishId, 
+        rating: rating, 
+        author: author, 
+        comment: comment, 
+        date:0,
+    }
+    newComment.date = new Date().toISOString;
+    //post req, via fetch, extra opjest in argument
+    return fetch(baseUrl + 'comments', {
+        method: 'POST',
+        body: JSON.stringify(newComment),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+    })
+    //handling reposnce after post similar to get req
+    .then( response =>{
+        if(response.ok){
+            return response
+        }
+        else{
+            //if fetch is not working(delay to get response from server)
+            var err = Error('Error' + response.status + ':' + response.text);
+            err.response = response;
+            throw err;
+        }
+    }, 
+    //error handler(no response at all then)
+    err => {
+        var errmsg = new Error(err.message);
+        throw errmsg;
+    })
+    .then( response => response.json())
+    .then(response => dispatch(addComment(response)))
+    .catch(err => { console.log('Post comment'+ err.message);
+                alert('Your comment could not b posted \nERROR'+err.message);                
+})
+
+}
 
 //////////////dishes/////////////////////
 //thunk converts actions(obj) to appropriate function

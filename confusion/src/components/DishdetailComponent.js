@@ -24,23 +24,24 @@ function RenderDish({ dish }){
             );
     }
     
-function RenderComments({comments, addComment, dishId}){
+function RenderComments({comments, postComment, dishId}){
         if(comments != null)
             return(
                 <div className="col-12 col-md-5 m-1">
                 <h4>Comments</h4>
                 <ul className="list-unstyled">
                     { comments.map((com) =>{
+                        {console.log(com);}
                         return(
                             <li key={ com.id }>
                             <p>{ com.comment } </p>  
-                            <p>--{ com.author }, { new Intl.DateTimeFormat('en-US',{year: 'numeric', month: 'short', date: '2-digit'}).format(new Date(Date.parse(com.date))) }</p>
+                            <p>--{ com.author }, { com.date }</p>
                             </li>
                         );
                         
                     }) }
                 </ul>
-                <CommentForm addComment={addComment} dishId={dishId} />
+                <CommentForm postComment={postComment} dishId={dishId} />
                 </div>
             );
         
@@ -82,7 +83,7 @@ const DishDetail = (props) => {
                 <div className="row">
                     <RenderDish dish={ props.dish }/>
                     <RenderComments comments={ props.comments }
-                    addComment={ props.addComment }
+                    postComment={ props.postComment }
                     dishId={ props.dish.id }
                     
                     />
@@ -118,7 +119,7 @@ class CommentForm extends Component{
     }
     handleSubmit(values){
         this.toggleModal();
-        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+        this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
     }
 
     render(){

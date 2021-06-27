@@ -10,8 +10,8 @@ export const Comments = (state = {
 
         case ActionTypes.ADD_COMMENT:
             var comment = action.payload;
-            comment.id = state.comments.length;
-            comment.date = new Date().toISOString();
+            //comment id will be automatically added by the server
+            //#comment.id = state.comments.length;
             //not modifing the state with extra comment obj
             //concat() fun return new state with added elements into the array
             return {...state, comments: state.comments.concat(comment) };
